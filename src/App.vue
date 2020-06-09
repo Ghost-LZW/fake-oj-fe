@@ -1,28 +1,58 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <el-container>
+      <el-header>
+        <HeaderBar/>
+      </el-header>
+      <el-main>
+        <router-view style="margin-bottom: 80px" />
+      </el-main>
+      <el-footer :style="{ height }">
+        <footer-bar />
+      </el-footer>
+    </el-container>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HeaderBar from "./components/HeaderBar";
+import FooterBar from "./components/FooterBar";
 
 export default {
   name: 'App',
+  props: {
+    height: {
+      type: String,
+      default: '10px'
+    }
+  },
   components: {
-    HelloWorld
+    FooterBar,
+    HeaderBar
+  },
+  created() {
+    this.getRequest('/loginStatue').then(resp => {
+      //console.log(resp)
+      if (resp === null) return
+      if (resp.statue === 0) {
+         this.$store.commit('login', resp.data);
+      } else {
+        this.$store.commit('logout')
+      }
+    })
+    //if (window.screen.width > 1000) {
+    //  document.write('<body style="zoom: 125%">')
+    //}
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+  }
 </style>
