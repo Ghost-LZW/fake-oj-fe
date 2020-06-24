@@ -66,8 +66,8 @@
             };
             let validateName = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请输入密码'));
-                } else if (this.ckName(value) === 0) {
+                    callback(new Error('请输入用户名'));
+                } else if (!this.ckName(value)) {
                     callback(new Error('用户名已存在!'));
                 } else {
                     callback();
@@ -84,7 +84,6 @@
                 },
                 rules: {
                     username: [
-                        {required: true, message: '请输入用户名', trigger: 'blur'},
                         {validator: validateName, trigger: 'blur'},
                         { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
                     ],
