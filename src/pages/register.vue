@@ -64,10 +64,10 @@
                     callback();
                 }
             };
-            let validateName = (rule, value, callback) => {
+            let validateName = async (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入用户名'));
-                } else if (!this.ckName(value)) {
+                } else if (!await this.ckName(value)) {
                     callback(new Error('用户名已存在!'));
                 } else {
                     callback();
@@ -112,14 +112,13 @@
             document.title = "Fake OJ 注册"
         },
         methods:{
-            ckName(name) {
-                let flag = false
-                this.getRequest("/ckName", {
+            async ckName(name) {
+                this.flag = false
+                return await this.getRequest("/ckName", {
                     name: name
                 }).then(resp => {
-                    if (resp === 1) flag = true
+                    return resp === 1;
                 })
-                return flag
             },
             submitForm(registerForm) {
                 this.$refs[registerForm].validate((valid) => {
